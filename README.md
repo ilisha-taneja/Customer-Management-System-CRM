@@ -1,7 +1,6 @@
-# Nimbus CRM — Frontend Customer Management System
+# Customer Management System (CRM)
 
-A complete, frontend-only CRM built with **HTML5, CSS3 and vanilla JavaScript** (no framework, no build step).
-All data is stored in `localStorage` and seeded automatically on first run.
+Customer Management System (CRM) is a comprehensive web application that helps businesses manage customer information, track interactions, manage leads, and improve customer relationships. This
 
 **Files:** `index.html` · `style.css` · `script.js`
 
@@ -52,6 +51,23 @@ You can also click the demo account buttons on the login screen, or register a n
 | `#settings`          | Company, theme, date format, currency, rows per page; JSON/CSV import-export; reset to seed |
 
 ---
+## Project Structure
+
+crm/
+├── index.html      # Single-page app: auth screen, sidebar/topbar shell, all 9 page sections, modal & toast roots, CDN scripts
+├── style.css       # CSS variables (light/dark themes), layout, components, responsive breakpoints (960px, 720px, 480px)
+├── script.js       # All app logic, organized in 10 sections:
+│                   #   1. State + seed data (12 customers, 9 leads, 25 interactions, 3 users)
+│                   #   2. Storage helpers (localStorage load/save)
+│                   #   3. Utilities (esc, formatters, toast, modal, Chart.js wrapper)
+│                   #   4. Auth + permissions (login/register/session, role matrix)
+│                   #   5. Router (hash-based, role-guarded)
+│                   #   6. Page renderers (dashboard, customers, form, detail, interactions, leads, reports, users, settings)
+│                   #   7. Modals (lead, user, profile, email, log interaction)
+│                   #   8. Export / import (JSON, CSV, PDF, Excel)
+│                   #   9. Event handlers (delegated click/change, forms, keyboard)
+│                   #   10. Boot
+└── README.md       # Run instructions, demo logins, route/feature reference
 
 ## Features
 
