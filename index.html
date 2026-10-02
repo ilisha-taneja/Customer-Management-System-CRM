@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nimbus CRM — Customer Management System</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234F46E5'/%3E%3Cpath d='M18 24l14-8 14 8-14 8-14-8zm0 8l14 8 14-8M18 40l14 8 14-8' fill='none' stroke='white' stroke-width='4' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ================= AUTH SCREEN ================= -->
+  <div class="auth-screen" id="authScreen">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <span class="auth-logo"><i class="fa-solid fa-layer-group"></i></span>
+        <div>
+          <h1>Nimbus CRM</h1>
+          <p>Customer management for growing teams</p>
+        </div>
+      </div>
+
+      <div class="auth-tabs" role="tablist" aria-label="Authentication">
+        <button type="button" class="auth-tab active" id="tabLogin" data-auth-tab="login" role="tab" aria-selected="true" aria-controls="loginForm">Login</button>
+        <button type="button" class="auth-tab" id="tabRegister" data-auth-tab="register" role="tab" aria-selected="false" aria-controls="registerForm">Register</button>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" name="email" autocomplete="username" placeholder="you@company.com" required>
+          <p class="field-error" id="loginEmailErr" role="alert"></p>
+        </div>
+        <div class="field">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" name="password" autocomplete="current-password" placeholder="Your password" required>
+          <p class="field-error" id="loginPasswordErr" role="alert"></p>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-right-to-bracket"></i> Sign in</button>
+      </form>
+
+      <form id="registerForm" class="hidden" novalidate>
+        <div class="field">
+          <label for="regName">Full name</label>
+          <input type="text" id="regName" name="name" placeholder="Jane Doe" autocomplete="name" required>
+          <p class="field-error" id="regNameErr" role="alert"></p>
+        </div>
+        <div class="field">
+          <label for="regEmail">Email</label>
+          <input type="email" id="regEmail" name="email" placeholder="you@company.com" autocomplete="email" required>
+          <p class="field-error" id="regEmailErr" role="alert"></p>
+        </div>
+        <div class="field">
+          <label for="regPassword">Password</label>
+          <input type="password" id="regPassword" name="password" placeholder="At least 6 characters" autocomplete="new-password" required>
+          <p class="field-error" id="regPasswordErr" role="alert"></p>
+        </div>
+        <div class="field">
+          <label for="regRole">Role</label>
+          <select id="regRole" name="role">
+            <option value="Agent">Agent</option>
+            <option value="Manager">Manager</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-user-plus"></i> Create account</button>
+      </form>
+
+      <div class="demo-logins">
+        <p class="muted">Demo accounts (click to fill)</p>
+        <div class="demo-grid">
+          <button type="button" class="demo-btn" data-demo="admin@nimbus.test|admin123">
+            <span class="demo-role role-admin">Admin</span> admin@nimbus.test
+          </button>
+          <button type="button" class="demo-btn" data-demo="manager@nimbus.test|manager123">
+            <span class="demo-role role-manager">Manager</span> manager@nimbus.test
+          </button>
+          <button type="button" class="demo-btn" data-demo="agent@nimbus.test|agent123">
+            <span class="demo-role role-agent">Agent</span> agent@nimbus.test
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= APP SHELL ================= -->
+  <div class="app hidden" id="app">
+
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <div class="sidebar-brand">
+        <span class="auth-logo"><i class="fa-solid fa-layer-group"></i></span>
+        <span class="brand-text">Nimbus CRM</span>
+      </div>
+
+      <nav class="nav" id="mainNav">
+        <p class="nav-label">Overview</p>
+        <a class="nav-link" href="#dashboard" data-page="dashboard"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+
+        <p class="nav-label">Sales</p>
+        <a class="nav-link" href="#customers" data-page="customers"><i class="fa-solid fa-users"></i><span>Customers</span></a>
+        <a class="nav-link" href="#add-customer" data-page="add-customer"><i class="fa-solid fa-user-plus"></i><span>Add Customer</span></a>
+        <a class="nav-link" href="#leads" data-page="leads"><i class="fa-solid fa-bullseye"></i><span>Leads</span></a>
+        <a class="nav-link" href="#interactions" data-page="interactions"><i class="fa-solid fa-clock-rotate-left"></i><span>Interactions</span></a>
+
+        <p class="nav-label">Insights</p>
+        <a class="nav-link" href="#reports" data-page="reports"><i class="fa-solid fa-chart-pie"></i><span>Reports</span></a>
+
+        <p class="nav-label">Administration</p>
+        <a class="nav-link" href="#users" data-page="users"><i class="fa-solid fa-user-shield"></i><span>Users</span></a>
+        <a class="nav-link" href="#settings" data-page="settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+      </nav>
+
+      <div class="sidebar-foot">
+        <span class="badge" id="sidebarRoleBadge">Role</span>
+        <span class="muted" id="sidebarUserName">—</span>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-wrap">
+      <header class="topbar">
+        <button type="button" class="icon-btn menu-btn" id="menuBtn" aria-label="Open navigation menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <h1 class="page-title" id="pageTitle">Dashboard</h1>
+        <div class="topbar-spacer"></div>
+
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input type="search" id="globalSearch" placeholder="Search customers, leads…" aria-label="Global search" autocomplete="off">
+          <div class="search-results hidden" id="searchResults" role="listbox" aria-label="Search results"></div>
+        </div>
+
+        <button type="button" class="icon-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        </button>
+
+        <div class="user-menu">
+          <button type="button" class="user-btn" id="userBtn" aria-haspopup="true" aria-expanded="false">
+            <span class="avatar" id="userAvatar">U</span>
+            <span class="user-name" id="userNameLabel">User</span>
+            <i class="fa-solid fa-chevron-down caret" aria-hidden="true"></i>
+          </button>
+          <div class="dropdown hidden" id="userDropdown" role="menu">
+            <div class="dropdown-head">
+              <strong id="ddName">—</strong>
+              <span class="badge" id="ddRole">—</span>
+            </div>
+            <button type="button" role="menuitem" data-action="profile"><i class="fa-solid fa-user-pen"></i> Edit profile</button>
+            <button type="button" role="menuitem" data-action="logout"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="main" id="main">
+
+        <!-- DASHBOARD -->
+        <section class="page" id="page-dashboard" data-page="dashboard" aria-label="Dashboard">
+          <div id="dashboardContent"></div>
+        </section>
+
+        <!-- CUSTOMERS -->
+        <section class="page" id="page-customers" data-page="customers" aria-label="Customers">
+          <div class="page-head">
+            <div>
+              <h2>Customers</h2>
+              <p class="muted">Search, filter and manage your customer records.</p>
+            </div>
+            <a class="btn btn-primary" href="#add-customer"><i class="fa-solid fa-plus"></i> Add customer</a>
+          </div>
+
+          <div class="card">
+            <div class="toolbar">
+              <div class="toolbar-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="search" id="customerSearch" placeholder="Search by name, email or company…" aria-label="Search customers">
+              </div>
+              <div class="field-inline">
+                <label for="customerStatusFilter">Status</label>
+                <select id="customerStatusFilter" data-action="customer-status-filter">
+                  <option value="all">All statuses</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                  <option value="Lead">Lead</option>
+                </select>
+              </div>
+              <div class="field-inline">
+                <label for="customerSort">Sort</label>
+                <select id="customerSort" data-action="customer-sort">
+                  <option value="name-asc">Name A → Z</option>
+                  <option value="name-desc">Name Z → A</option>
+                  <option value="createdAt-desc">Newest first</option>
+                  <option value="createdAt-asc">Oldest first</option>
+                  <option value="company-asc">Company A → Z</option>
+                  <option value="status-asc">Status A → Z</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table class="table" id="customersTable">
+                <thead>
+                  <tr>
+                    <th data-action="customer-sort-th" data-key="name" scope="col">Customer <i class="fa-solid fa-sort"></i></th>
+                    <th data-action="customer-sort-th" data-key="email" scope="col">Email <i class="fa-solid fa-sort"></i></th>
+                    <th data-action="customer-sort-th" data-key="phone" scope="col">Phone</th>
+                    <th data-action="customer-sort-th" data-key="company" scope="col">Company <i class="fa-solid fa-sort"></i></th>
+                    <th data-action="customer-sort-th" data-key="status" scope="col">Status <i class="fa-solid fa-sort"></i></th>
+                    <th data-action="customer-sort-th" data-key="createdAt" scope="col">Created <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="col-actions">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="customersTbody"></tbody>
+              </table>
+            </div>
+            <div id="customersEmpty"></div>
+            <div class="table-foot">
+              <span class="muted" id="customersCount">0 customers</span>
+              <div class="pagination" id="customersPagination"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ADD / EDIT CUSTOMER -->
+        <section class="page" id="page-add-customer" data-page="add-customer" aria-label="Customer form">
+          <div class="page-head">
+            <div>
+              <h2 id="customerFormTitle">Add Customer</h2>
+              <p class="muted" id="customerFormSub">Create a new customer record.</p>
+            </div>
+            <a class="btn btn-ghost" href="#customers"><i class="fa-solid fa-arrow-left"></i> Back to list</a>
+          </div>
+
+          <form id="customerForm" class="card form-card" novalidate>
+            <input type="hidden" id="custId">
+            <h3 class="form-section-title"><i class="fa-solid fa-address-card"></i> Personal details</h3>
+            <div class="grid-2">
+              <div class="field">
+                <label for="custName">Full name <span class="req">*</span></label>
+                <input type="text" id="custName" placeholder="e.g. Aarav Sharma" autocomplete="off">
+                <p class="field-error" id="custNameErr" role="alert"></p>
+              </div>
+              <div class="field">
+                <label for="custEmail">Email <span class="req">*</span></label>
+                <input type="email" id="custEmail" placeholder="name@company.com">
+                <p class="field-error" id="custEmailErr" role="alert"></p>
+              </div>
+              <div class="field">
+                <label for="custPhone">Phone <span class="req">*</span></label>
+                <input type="tel" id="custPhone" placeholder="+1 415 555 0132">
+                <p class="field-error" id="custPhoneErr" role="alert"></p>
+              </div>
+            </div>
+
+            <h3 class="form-section-title"><i class="fa-solid fa-building"></i> Company &amp; contact details</h3>
+            <div class="grid-2">
+              <div class="field">
+                <label for="custCompany">Company <span class="req">*</span></label>
+                <input type="text" id="custCompany" placeholder="e.g. Nexatech Solutions">
+                <p class="field-error" id="custCompanyErr" role="alert"></p>
+              </div>
+              <div class="field">
+                <label for="custStatus">Status</label>
+                <select id="custStatus">
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                  <option value="Lead">Lead</option>
+                </select>
+              </div>
+              <div class="field field-full">
+                <label for="custNotes">Notes</label>
+                <textarea id="custNotes" rows="4" placeholder="Context, requirements, follow-ups…"></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> <span id="customerSubmitLabel">Save customer</span></button>
+              <a class="btn btn-ghost" href="#customers">Cancel</a>
+            </div>
+          </form>
+        </section>
+
+        <!-- CUSTOMER DETAIL -->
+        <section class="page" id="page-customer" data-page="customer" aria-label="Customer detail">
+          <div id="customerDetail"></div>
+        </section>
+
+        <!-- INTERACTIONS -->
+        <section class="page" id="page-interactions" data-page="interactions" aria-label="Interactions">
+          <div class="page-head">
+            <div>
+              <h2>Interactions</h2>
+              <p class="muted">Log and review emails, calls and meetings.</p>
+            </div>
+          </div>
+
+          <div class="split">
+            <form id="interactionForm" class="card form-card" novalidate>
+              <h3 class="form-section-title"><i class="fa-solid fa-pen-to-square"></i> Log a new interaction</h3>
+              <div class="field">
+                <label for="intType">Type</label>
+                <select id="intType">
+                  <option value="Email">Email</option>
+                  <option value="Call">Call</option>
+                  <option value="Meeting">Meeting</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="intCustomer">Customer <span class="req">*</span></label>
+                <select id="intCustomer"></select>
+                <p class="field-error" id="intCustomerErr" role="alert"></p>
+              </div>
+              <div class="field">
+                <label for="intSubject">Subject <span class="req">*</span></label>
+                <input type="text" id="intSubject" placeholder="e.g. Quarterly review call">
+                <p class="field-error" id="intSubjectErr" role="alert"></p>
+              </div>
+              <div class="field">
+                <label for="intNotes">Notes</label>
+                <textarea id="intNotes" rows="3" placeholder="What was discussed / outcome"></textarea>
+              </div>
+              <div class="field">
+                <label for="intDate">Date</label>
+                <input type="date" id="intDate">
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Log interaction</button>
+              </div>
+            </form>
+
+            <div class="card">
+              <div class="toolbar">
+                <div class="field-inline">
+                  <label for="intFilterType">Type</label>
+                  <select id="intFilterType" data-action="int-filter-type">
+                    <option value="all">All types</option>
+                    <option value="Email">Email</option>
+                    <option value="Call">Call</option>
+                    <option value="Meeting">Meeting</option>
+                  </select>
+                </div>
+                <div class="field-inline">
+                  <label for="intFilterCustomer">Customer</label>
+                  <select id="intFilterCustomer" data-action="int-filter-customer"></select>
+                </div>
+                <div class="field-inline">
+                  <label for="intFilterFrom">From</label>
+                  <input type="date" id="intFilterFrom" data-action="int-filter-from">
+                </div>
+                <div class="field-inline">
+                  <label for="intFilterTo">To</label>
+                  <input type="date" id="intFilterTo" data-action="int-filter-to">
+                </div>
+              </div>
+
+              <div class="table-wrap">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Date</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Customer</th>
+                      <th scope="col">Subject</th>
+                      <th scope="col">By</th>
+                    </tr>
+                  </thead>
+                  <tbody id="interactionsTbody"></tbody>
+                </table>
+              </div>
+              <div id="interactionsEmpty"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LEADS -->
+        <section class="page" id="page-leads" data-page="leads" aria-label="Leads">
+          <div class="page-head">
+            <div>
+              <h2>Leads</h2>
+              <p class="muted">Track prospects through your pipeline and convert them into customers.</p>
+            </div>
+            <button type="button" class="btn btn-primary" data-action="lead-add"><i class="fa-solid fa-plus"></i> Add lead</button>
+          </div>
+
+          <div class="card">
+            <div class="toolbar">
+              <div class="toolbar-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="search" id="leadSearch" placeholder="Search leads…" aria-label="Search leads">
+              </div>
+              <div class="field-inline">
+                <label for="leadStatusFilter">Stage</label>
+                <select id="leadStatusFilter" data-action="lead-status-filter">
+                  <option value="all">All stages</option>
+                  <option value="New">New</option>
+                  <option value="Contacted">Contacted</option>
+                  <option value="Qualified">Qualified</option>
+                  <option value="Proposal">Proposal</option>
+                  <option value="Won">Won</option>
+                  <option value="Lost">Lost</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Lead</th>
+                    <th scope="col">Company</th>
+                    <th scope="col">Source</th>
+                    <th scope="col">Stage</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Created</th>
+                    <th scope="col" class="col-actions">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="leadsTbody"></tbody>
+              </table>
+            </div>
+            <div id="leadsEmpty"></div>
+            <div class="table-foot">
+              <span class="muted" id="leadsCount">0 leads</span>
+              <span class="muted" id="leadsValue"></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- REPORTS -->
+        <section class="page" id="page-reports" data-page="reports" aria-label="Reports">
+          <div class="page-head">
+            <div>
+              <h2>Reports</h2>
+              <p class="muted">Customer and activity reports with export.</p>
+            </div>
+            <div class="btn-row">
+              <button type="button" class="btn btn-outline" data-action="report-pdf"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+              <button type="button" class="btn btn-outline" data-action="report-excel"><i class="fa-solid fa-file-excel"></i> Excel</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="toolbar">
+              <div class="field-inline">
+                <label for="repType">Report</label>
+                <select id="repType" data-action="report-type">
+                  <option value="customers">Customer report</option>
+                  <option value="activity">Activity report</option>
+                </select>
+              </div>
+              <div class="field-inline">
+                <label for="repFrom">From</label>
+                <input type="date" id="repFrom" data-action="report-from">
+              </div>
+              <div class="field-inline">
+                <label for="repTo">To</label>
+                <input type="date" id="repTo" data-action="report-to">
+              </div>
+              <div class="field-inline" id="repStatusWrap">
+                <label for="repStatus">Status</label>
+                <select id="repStatus" data-action="report-status">
+                  <option value="all">All statuses</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                  <option value="Lead">Lead</option>
+                </select>
+              </div>
+              <div class="field-inline hidden" id="repActivityWrap">
+                <label for="repActivityType">Type</label>
+                <select id="repActivityType" data-action="report-activity-type">
+                  <option value="all">All types</option>
+                  <option value="Email">Email</option>
+                  <option value="Call">Call</option>
+                  <option value="Meeting">Meeting</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div id="reportsContent"></div>
+        </section>
+
+        <!-- USERS -->
+        <section class="page" id="page-users" data-page="users" aria-label="Users">
+          <div class="page-head">
+            <div>
+              <h2>User Management</h2>
+              <p class="muted">Admin-only. Manage accounts and roles.</p>
+            </div>
+            <button type="button" class="btn btn-primary" data-action="user-add"><i class="fa-solid fa-user-plus"></i> Add user</button>
+          </div>
+
+          <div class="card">
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">User</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Role</th>
+                    <th scope="col" class="col-actions">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTbody"></tbody>
+              </table>
+            </div>
+            <div id="usersEmpty"></div>
+          </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section class="page" id="page-settings" data-page="settings" aria-label="Settings">
+          <div class="page-head">
+            <div>
+              <h2>Settings</h2>
+              <p class="muted">Workspace preferences and data management.</p>
+            </div>
+          </div>
+
+          <div class="split">
+            <form id="settingsForm" class="card form-card" novalidate>
+              <h3 class="form-section-title"><i class="fa-solid fa-sliders"></i> Workspace</h3>
+              <div class="field">
+                <label for="setCompany">Company name</label>
+                <input type="text" id="setCompany" placeholder="Nimbus CRM">
+              </div>
+              <div class="field">
+                <label for="setTheme">Theme</label>
+                <select id="setTheme">
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="setDateFormat">Date format</label>
+                <select id="setDateFormat">
+                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                  <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                  <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="setCurrency">Currency</label>
+                <select id="setCurrency">
+                  <option value="USD">USD ($)</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="INR">INR (₹)</option>
+                  <option value="AUD">AUD (A$)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="setPerPage">Rows per page</label>
+                <select id="setPerPage">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save settings</button>
+              </div>
+            </form>
+
+            <div class="card">
+              <h3 class="form-section-title"><i class="fa-solid fa-database"></i> Data management</h3>
+              <div class="btn-col">
+                <button type="button" class="btn btn-outline" data-action="export-json"><i class="fa-solid fa-file-code"></i> Export all data (JSON)</button>
+                <button type="button" class="btn btn-outline" data-action="import-json"><i class="fa-solid fa-file-import"></i> Import data (JSON)</button>
+                <button type="button" class="btn btn-outline" data-action="export-csv"><i class="fa-solid fa-file-csv"></i> Export customers (CSV)</button>
+                <button type="button" class="btn btn-outline" data-action="import-csv"><i class="fa-solid fa-file-import"></i> Import customers (CSV)</button>
+                <button type="button" class="btn btn-danger" id="resetBtn" data-action="reset-data"><i class="fa-solid fa-rotate-left"></i> Reset data to seed</button>
+              </div>
+              <input type="file" id="importJsonInput" accept="application/json,.json" class="hidden">
+              <input type="file" id="importCsvInput" accept=".csv,text/csv" class="hidden">
+              <p class="muted hint">JSON contains every collection (customers, leads, interactions, users, settings). CSV import expects the columns: id, name, email, phone, company, status, notes, createdAt.</p>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <div id="modalRoot"></div>
+  <div class="toast-root" id="toastRoot" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
