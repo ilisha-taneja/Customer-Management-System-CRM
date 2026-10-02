@@ -12,16 +12,16 @@ Customer Management System (CRM) is a comprehensive web application that helps b
 
 Double-click `index.html` (or drag it into your browser). Done.
 
-**Option 2 — local server (recommended, avoids any file:// quirks)**
+**Option 2 — server Links**
 
 ```bash
-cd crm
-python3 -m http.server 8000
+1. cd crm
+2. python3 -m http.server 8000
 # then open http://localhost:8000
 
 or
 
-Site is live at - https://ilisha-taneja.github.io/Customer-Management-System-CRM/
+1. Site is live at link - https://ilisha-taneja.github.io/Customer-Management-System-CRM/
 ```
 
 Internet access is required on first load for the CDN assets (Font Awesome, Chart.js, jsPDF, SheetJS, Inter font).
