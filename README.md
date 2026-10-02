@@ -53,7 +53,7 @@ You can also click the demo account buttons on the login screen, or register a n
 ---
 ## Project Structure
 
-'''
+```
 crm/
 ├── index.html      # Single-page app: auth screen, sidebar/topbar shell, all 9 page sections, modal & toast roots, CDN scripts
 ├── style.css       # CSS variables (light/dark themes), layout, components, responsive breakpoints (960px, 720px, 480px)
@@ -69,8 +69,7 @@ crm/
 │                   #   9. Event handlers (delegated click/change, forms, keyboard)
 │                   #   10. Boot
 └── README.md       # Run instructions, demo logins, route/feature reference
-
-'''
+```
 
 ## Features
 
@@ -88,8 +87,4 @@ crm/
 ## Data
 
 Seed data: **12 customers, 9 leads, 25 interactions, 3 users**.
-Every change is written to `localStorage` immediately. **Settings → Reset data to seed** restores everything.
 
-## Browser support
-
-Modern evergreen browsers (Chrome, Edge, Firefox, Safari).
