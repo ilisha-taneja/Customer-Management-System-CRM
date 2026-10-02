@@ -18,6 +18,10 @@ Double-click `index.html` (or drag it into your browser). Done.
 cd crm
 python3 -m http.server 8000
 # then open http://localhost:8000
+
+or
+
+Site is live at - https://ilisha-taneja.github.io/Customer-Management-System-CRM/
 ```
 
 Internet access is required on first load for the CDN assets (Font Awesome, Chart.js, jsPDF, SheetJS, Inter font).
